@@ -1,0 +1,1 @@
+{"groups":{"default":{"perms":["world.*","chat.*", "info.*"],"noPerms":["op.*"]}, "admin":{"noPerms": [], "perms": ["*.*"], "prefix": "&4[Admin]&r"}},"players":{"TechmandanCZ": {"group":"admin"}}}

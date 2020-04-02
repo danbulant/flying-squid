@@ -1,4 +1,5 @@
 const Vec3 = require('vec3').Vec3
+const permissions = require("./permissions").permissions();
 
 module.exports.player = function (player, serv) {
   function cancelDig ({ position, block }) {
@@ -6,6 +7,7 @@ module.exports.player = function (player, serv) {
   }
 
   player._client.on('block_dig', async ({ location, status, face }) => {
+    if(!permissions.hasPermission(player.username, "world.dig"))return;
     let pos = new Vec3(location.x, location.y, location.z)
 
     const directionVector = directionToVector[face]

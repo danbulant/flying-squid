@@ -1,3 +1,5 @@
+const permissions = require("./permissions").permissions();
+
 module.exports.server = function (serv) {
   serv.broadcast = (message, { whitelist = serv.players, blacklist = [], system = false } = {}) => {
     if (whitelist.type === 'player') whitelist = [whitelist]
@@ -122,11 +124,15 @@ module.exports.server = function (serv) {
 module.exports.player = function (player, serv) {
   player._client.on('chat', ({ message } = {}) => {
     if (message[0] === '/') {
+      if(!permissions.hasPermission(player.username, "commands.use"))return player.chat("You don't have permission to use commands");
+
       player.behavior('command', { command: message.slice(1) }, ({ command }) => player.handleCommand(command))
     } else {
+      if(!permissions.hasPermission(player.username, "chat.send"))return player.chat("You don't have permission to use chat");
+
       player.behavior('chat', {
         message: message,
-        prefix: '<' + player.username + '> ',
+        prefix: permissions.getPrefix(player.username) + player.username + permissions.getSuffix(player.username) + permissions.getSeparator(),
         text: message,
         whitelist: serv.players,
         blacklist: []

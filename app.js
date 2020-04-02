@@ -22,4 +22,6 @@ module.exports = mcServer.createMCServer(settings)
 
 process.on('unhandledRejection', err => {
   console.log(err.stack)
-})
+});
+
+console.log("MC Server running as " + process.pid);

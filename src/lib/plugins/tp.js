@@ -7,7 +7,7 @@ module.exports.player = (player, serv) => {
     aliases: ['tp'],
     info: 'to teleport a player',
     usage: '/teleport [target player] <destination player or x> [y] [z]',
-    op: true,
+    permission: "mod.tp",
     parse (str) {
       return str.match(/^(((.* )?~?-?\d* ~?-?\d* ~?-?\d*)|(.+ .+))$/) ? str.split(' ') : false
     },

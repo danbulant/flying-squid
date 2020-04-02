@@ -1,18 +1,19 @@
 const moment = require('moment')
 const rp = require('request-promise')
 const UUID = require('uuid-1345')
+const translation = require("./translation").translation();
 
 module.exports.server = function (serv) {
   serv.ban = (uuid, reason) => {
     serv.bannedPlayers[uuid] = {
       time: +moment(),
-      reason: reason || 'Your account is banned!'
+      reason: reason || translation.defaults.ban
     }
   }
   serv.banIP = (IP, reason) => {
     serv.bannedIPs[IP] = {
       time: +moment(),
-      reason: reason || 'Your IP is banned!'
+      reason: reason || translation.defaults.banIp
     }
     Object.keys(serv.players)
       .filter(uuid => serv.players[uuid]._client.socket.remoteAddress === IP)
@@ -59,17 +60,17 @@ module.exports.server = function (serv) {
 }
 
 module.exports.player = function (player, serv) {
-  player.kick = (reason = 'You were kicked!') =>
-    player._client.end(reason)
+  player.kick = (reason) =>
+    player._client.end(reason || translation.commands.kick)
 
   player.ban = reason => {
-    reason = reason || 'You were banned!'
+    reason = reason || translation.commands.ban
     player.kick(reason)
     const uuid = player.uuid
     serv.ban(uuid, reason)
   }
   player.banIP = reason => {
-    reason = reason || 'You were IP banned!'
+    reason = reason || translation.commands.banIp
     player.kick(reason)
     serv.banIP(player._client.socket.remoteAddress)
   }
@@ -80,7 +81,7 @@ module.exports.player = function (player, serv) {
     base: 'kick',
     info: 'to kick a player',
     usage: '/kick <player> [reason]',
-    op: true,
+    permissions: "commands.kick",
     parse (str) {
       if (!str.match(/([a-zA-Z0-9_]+)(?: (.*))?/)) { return false }
       const parts = str.split(' ')
@@ -92,7 +93,7 @@ module.exports.player = function (player, serv) {
     action ({ username, reason }) {
       const kickPlayer = serv.getPlayer(username)
       if (!kickPlayer) {
-        player.chat(username + ' is not on this server!')
+        player.chat(translation.errors.playerExists.replace("%1", username))
       } else {
         kickPlayer.kick(reason)
         kickPlayer.emit('kicked', player, reason)
@@ -104,7 +105,7 @@ module.exports.player = function (player, serv) {
     base: 'ban',
     info: 'to ban a player',
     usage: '/ban <player> [reason]',
-    op: true,
+    permissions: "commands.ban",
     parse (str) {
       if (!str.match(/([a-zA-Z0-9_]+)(?: (.*))?/)) { return false }
       const parts = str.split(' ')
@@ -120,11 +121,11 @@ module.exports.player = function (player, serv) {
         serv.banUsername(username, reason)
           .then(() => {
             serv.emit('banned', player, username, reason)
-            player.chat(username + ' was banned')
+            player.chat(translation.commands.banB.replace("%1",username))
           })
           .catch(err => {
             if (err) { // This tricks eslint
-              player.chat(username + ' is not a valid player!')
+              player.chat(translation.errros.playerExists.replace("%1",username))
             }
           })
       } else {
@@ -138,7 +139,7 @@ module.exports.player = function (player, serv) {
     base: 'ban-ip',
     info: 'bans a specific IP',
     usage: '/ban-ip <ip> [reason]',
-    op: true,
+    permissions: "commands.banip",
     parse (str) {
       const argv = str.split(' ')
       if (argv.length < 1) return
@@ -158,7 +159,7 @@ module.exports.player = function (player, serv) {
     base: 'pardon-ip',
     info: 'to pardon a player by ip',
     usage: '/pardon-ip <ip>',
-    op: true,
+    permissions: "commands.pardon",
     action (IP) {
       const result = serv.pardonIP(IP)
       player.chat(result ? IP + ' was IP pardoned' : IP + ' is not banned')
@@ -169,7 +170,7 @@ module.exports.player = function (player, serv) {
     base: 'pardon',
     info: 'to pardon a player',
     usage: '/pardon <player>',
-    op: true,
+    permissions: "commands.pardon",
     parse (str) {
       if (!str.match(/([a-zA-Z0-9_]+)/)) { return false }
       return str

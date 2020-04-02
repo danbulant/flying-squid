@@ -84,7 +84,7 @@ module.exports.player = function (player, serv, options) {
     base: 'summon',
     info: 'Summon an entity',
     usage: '/summon <entity_name>',
-    op: true,
+    permission: "world.summon",
     action (name) {
       if (Object.keys(serv.entities).length > options['max-entities']) { throw new UserError('Too many mobs !') }
       const entity = entitiesByName[name]
@@ -108,7 +108,7 @@ module.exports.player = function (player, serv, options) {
     base: 'summonMany',
     info: 'Summon many entities',
     usage: '/summonMany <number> <entity_name>',
-    op: true,
+    permission: "world.summonMany",
     parse (str) {
       const args = str.split(' ')
       if (args.length !== 2) { return false }
@@ -140,7 +140,7 @@ module.exports.player = function (player, serv, options) {
     base: 'pile',
     info: 'make a pile of entities',
     usage: '/pile <entities types>',
-    op: true,
+    permission: "world.pile",
     parse (str) {
       const args = str.split(' ')
       if (args.length === 0) { return false }
@@ -172,7 +172,7 @@ module.exports.player = function (player, serv, options) {
     base: 'attach',
     info: 'attach an entity on an other entity',
     usage: '/attach <carrier> <attached>',
-    op: true,
+    permission: "world.attach",
     parse (str) {
       const args = str.split(' ')
       if (args.length !== 2) { return false }

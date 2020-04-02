@@ -17,7 +17,7 @@ module.exports.player = function (player, serv) {
     aliases: ['gm'],
     info: 'to change game mode',
     usage: '/gamemode <0-3>',
-    op: true,
+    permission: 'world.changeGamemode',
     parse (str) {
       if (!str.match(/^([0-3])$/)) { return false }
       return parseInt(str)
@@ -32,7 +32,7 @@ module.exports.player = function (player, serv) {
     aliases: ['diff'],
     info: 'Sets the difficulty level',
     usage: '/difficulty <difficulty>',
-    op: true,
+    permission: "world.difficulty",
     parse (str) {
       if (!str.match(/^([0-3])$/)) { return false }
       return parseInt(str)

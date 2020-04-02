@@ -1,5 +1,5 @@
 const Vec3 = require('vec3').Vec3
-
+const permissions = require("./permissions").permissions();
 const materialToSound = {
   undefined: 'stone',
   'rock': 'stone',
@@ -14,6 +14,8 @@ module.exports.player = function (player, serv, { version }) {
   const blocks = require('minecraft-data')(version).blocks
 
   player._client.on('block_place', ({ direction, location } = {}) => {
+    if(!permissions.hasPermission(player.username, "world.place"))return;
+    
     const heldItem = player.inventory.slots[36 + player.heldItemSlot]
     if (heldItem === undefined) return
     if (direction === -1 || heldItem.type === -1 || !blocks[heldItem.type]) return

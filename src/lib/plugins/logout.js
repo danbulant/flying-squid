@@ -1,4 +1,6 @@
 const once = require('event-promise')
+const permissions = require("./permissions").permissions();
+const translation = require("./translation").translation();
 
 module.exports.server = function (serv) {
   serv.quit = async (reason = 'Going down') => {
@@ -18,7 +20,10 @@ module.exports.player = function (player, serv) {
 
   player._client.on('end', () => {
     if (player && player.username) {
-      serv.broadcast(serv.color.yellow + player.username + ' quit the game.')
+      var user = player.username;
+      if(translation.server.disconnectedPrefix) user = permissions.getPrefix(player.username) + player.username + permissions.getSuffix(player.username);
+
+      serv.broadcast(translation.server.disconnected.replace("%1", user));
       player._writeOthers('player_info', {
         action: 4,
         data: [{

@@ -39,7 +39,7 @@ module.exports.server = function (serv, settings) {
     if (serv.plugins[p].server) f.call(serv.plugins[p], serv, settings)
   })
 
-  serv.on('asap', () => {
+  serv.on('ready', () => {
     Object.keys(serv.plugins).map(p => serv.log('[PLUGINS] Loaded "' + serv.plugins[p].name + '"'))
   })
 

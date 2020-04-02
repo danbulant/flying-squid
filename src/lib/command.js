@@ -1,3 +1,5 @@
+const permissions = require("./plugins/permissions").permissions();
+
 class Command {
   constructor (params, parent, hash) {
     this.params = params
@@ -18,18 +20,19 @@ class Command {
     return undefined
   }
 
-  async use (command, op = true) {
+  async use (command, op = true, username = null) {
     let res = this.find(command)
 
     if (res) {
       let [com, pars] = res
-      if (com.params.op && !op) return 'You do not have permission to use this command'
+      if (!op && com.params.permission && !permissions.hasPermission(username, com.params.permission)) return 'You do not have permission to use this command';
+      if (com.params.op && !op) return 'You do not have permission to use this command';
       const parse = com.params.parse
       if (parse) {
         if (typeof parse === 'function') {
           pars = parse(pars)
           if (pars === false) {
-            return com.params.usage ? 'Usage: ' + com.params.usage : 'Bad syntax'
+            return com.params.usage ? 'Usage: ' + com.params.usage : 'Bad syntax';
           }
         } else {
           pars = pars.match(parse)

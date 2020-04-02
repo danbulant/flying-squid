@@ -1,10 +1,12 @@
 const UserError = require('flying-squid').UserError
+const permissions = require("./permissions");
 
 module.exports.player = function (player, serv, { version }) {
   player.commands.add({
     base: 'help',
     info: 'to show all commands',
     usage: '/help [command]',
+    permission: "commands.help",
     parse (str) {
       const params = str.split(' ')
       const page = parseInt(params[params.length - 1])
@@ -24,7 +26,7 @@ module.exports.player = function (player, serv, { version }) {
 
       if (found.length === 0) { // None found
         return 'Could not find any matches'
-      } else if (found.length === 1) { // Single command found, giev info on command
+      } else if (found.length === 1) { // Single command found, give info on command
         const cmd = hash[found[0]]
         const usage = (cmd.params && cmd.params.usage) || cmd.base
         const info = (cmd.params && cmd.params.info) || 'No info'
@@ -69,6 +71,7 @@ module.exports.player = function (player, serv, { version }) {
     base: 'modpe',
     info: 'for modpe commands',
     usage: '/modpe <params>',
+    permissions: "mod.pe",
     parse (str) { return str || false },
     action (str) {
       player.emit('modpe', str)
@@ -79,8 +82,9 @@ module.exports.player = function (player, serv, { version }) {
     base: 'version',
     info: 'to get version of the server',
     usage: '/version',
+    permissions: "info.version",
     action () {
-      return 'This server is running flying-squid version ' + version
+      return 'This server is running nodecraft version ' + version
     }
   })
 
@@ -88,8 +92,9 @@ module.exports.player = function (player, serv, { version }) {
     base: 'bug',
     info: 'to bug report',
     usage: '/bug',
+    permissions: "info.bug",
     action () {
-      return 'Report bugs / issues here: https://github.com/PrismarineJS/flying-squid/issues'
+      return 'Report bugs / issues here: https://github.com/PrismarineJS/flying-squid/issues unless related to permissions, in which case contact developer TechamdanCZ#0135 on discord.'
     }
   })
 
@@ -109,7 +114,7 @@ module.exports.player = function (player, serv, { version }) {
 
   player.handleCommand = async (str) => {
     try {
-      const res = await player.commands.use(str, player.op)
+      const res = await player.commands.use(str, player.op, player.username)
       if (res) player.chat(serv.color.red + res)
     } catch (err) {
       if (err.userError) player.chat(serv.color.red + 'Error: ' + err.message)

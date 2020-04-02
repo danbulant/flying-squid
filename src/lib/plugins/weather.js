@@ -3,7 +3,7 @@ module.exports.player = function (player, serv) {
     base: 'weather',
     info: 'Sets the weather.',
     usage: '/weather <clear|rain>',
-    op: true,
+    permission: "world.changeWeather",
     parse (str) {
       const args = str.split(' ')
       if (args.length !== 1) { return false }

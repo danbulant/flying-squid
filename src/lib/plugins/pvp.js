@@ -34,7 +34,7 @@ module.exports.player = function (player, serv) {
     base: 'kill',
     info: 'Kill entities',
     usage: '/kill <selector>',
-    op: true,
+    permission: "mod.kill",
     parse (str) {
       return str || false
     },
