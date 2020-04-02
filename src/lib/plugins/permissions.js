@@ -64,7 +64,7 @@ module.exports.permissions = ()=>{
             else throw Error("No default permission group. Cannot continue.");
         }
 
-        return perms.groups[group][property] | "";
+        return perms.groups[group][property] || "";
     }
     permissions.getPrefix = (player)=>{
         return permissions._getProperty(player, "prefix");
