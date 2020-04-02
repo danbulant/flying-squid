@@ -1,29 +1,19 @@
-flying-squid
+flying-squid - fork by Daniel Bulant
 ================
 
-[![NPM version](https://img.shields.io/npm/v/flying-squid.svg)](http://npmjs.com/package/flying-squid)
-[![Build Status](https://img.shields.io/circleci/project/github/PrismarineJS/flying-squid/master.svg)](https://circleci.com/gh/PrismarineJS/flying-squid)
-[![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
-[![Gitter](https://img.shields.io/badge/chat-on%20gitter-brightgreen.svg)](https://gitter.im/PrismarineJS/general)
-[![Irc](https://img.shields.io/badge/chat-on%20irc-brightgreen.svg)](https://irc.gitter.im/)
-
+[![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/dZtq4Qu)
 
 Create Minecraft servers with a powerful, stable, and high level JavaScript API.
 
-## Features
-* Support for Minecraft 1.8 and 1.12
-* Players can see the world
-* Players see each other in-game and in tab
-* Digging
-* Placing blocks
-* Player movement
-* World generation
-* Anvil loading
-* Multi-world
+## New features (I added to fork)
+
+* Permissions
+* Player grouping
+* Prefixes
 
 ## Test server
 
-* rom1504.fr (Port 25565) using [auto-squid](https://github.com/rom1504/auto-squid)
+* No test server currently 24/7 of this fork *
 
 ## Building / Running
 Before running or building it is recommended that you configure the server in `config/settings.json`
